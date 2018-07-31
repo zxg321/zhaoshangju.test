@@ -1,0 +1,23 @@
+{
+    "name": "zxg321/zmall",
+    "description": "zmall",
+    "authors": [
+        {
+            "name": "zxg321",
+            "email": "zxg321@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Zxg321\\Zmall\\": "src/"
+        }
+    },
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zxg321\\Zmall\\ZmallServiceProvider"
+            ]
+        }
+    }
+}
