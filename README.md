@@ -1,6 +1,8 @@
 zmall for laravel
 ===============================
-
+```
+$ laravel new zmall
+```
 
 License
 ------------
