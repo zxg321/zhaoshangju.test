@@ -1,6 +1,10 @@
 {
     "name": "zxg321/zmall",
     "description": "zmall",
+    "type"       : "library",
+    "keywords"   : ["laravel", "php", "mall"],
+    "homepage"   : "https://github.com/zxg321/zmall",
+    "license"    : "MIT",
     "authors": [
         {
             "name": "zxg321",
