@@ -106,10 +106,10 @@ class MenuController extends Controller
         return Admin::form(NetMenu::class, function (Form $form) {
             $form->saved(function (Form $form) {
                 $menu_mod=new Menu();
-                if($menu=$menu_mod->where([['parent_id',0],['menu_type',1],['menu_id',0]])->first()){
+                if($menu=$menu_mod->where([['parent_id',9],['menu_type',1],['menu_id',0]])->first()){
                     //dd($form->model());
                     if($form->model()->id>0){
-                        if(!$c_menu=$menu_mod->where([['parent_id',$menu->id],['menu_type',1],['menu_id',$form->model()->id]])->first()){
+                        if(!$c_menu=$menu_mod->where([['menu_type',1],['menu_id',$form->model()->id]])->first()){
                             $c_menu=new Menu();
                         }
                         $c_menu->title=$form->model()->title;
@@ -125,15 +125,15 @@ class MenuController extends Controller
                         
                         $code=$form->model()->code;
                         if(in_array($code,['news','newsindex','newslist'])){
-                            $c_menu->uri='content?id='.$form->model()->id;
+                            $c_menu->uri='setting/content?id='.$form->model()->id;
                             $c_menu->icon='fa-newspaper-o';
                             $c_menu->save();
                         }elseif($code=='content'){
-                            $c_menu->uri='category/'.$form->model()->id.'/edit';
+                            $c_menu->uri='setting/menu/'.$form->model()->id.'/edit';
                             $c_menu->icon='fa-compass';
                             $c_menu->save();
                         }elseif($code=='guestbook'){
-                            $c_menu->uri='guestbook?pid='.$form->model()->id;
+                            $c_menu->uri='setting/guestbook?pid='.$form->model()->id;
                             $c_menu->icon='fa-at';
                             $c_menu->save();
                         }elseif($code=='link'){
@@ -159,15 +159,15 @@ class MenuController extends Controller
                                 $code=$category->code;
                                 $menu_add=false;
                                 if(in_array($code,['news','newsindex','newslist'])){
-                                    $c_menu->uri='content?id='.$category->id;
+                                    $c_menu->uri='setting/content?id='.$category->id;
                                     $c_menu->icon='fa-newspaper-o';
                                     $menu_add=true;
                                 }elseif($code=='content'){
-                                    $c_menu->uri='category/'.$category->id.'/edit';
+                                    $c_menu->uri='setting/menu/'.$category->id.'/edit';
                                     $c_menu->icon='fa-compass';
                                     $menu_add=true;
                                 }elseif($code=='guestbook'){
-                                    $c_menu->uri='guestbook?pid='.$category->id;
+                                    $c_menu->uri='setting/guestbook?pid='.$category->id;
                                     $c_menu->icon='fa-at';
                                     $menu_add=true;
                                 }elseif($code=='link'){
@@ -217,7 +217,7 @@ class MenuController extends Controller
                 
             })->tab('连接设置', function ($form) {
                 $form->switch('is_url', '连接开关');
-                $form->url('url', '连接地址');
+                $form->text('url', '连接地址');
             })->tab('内容显示信息', function ($form) {
                 $form->editor('menu_content', '内容显示');//->help('使用模版选择【内容显示】的时候显示内容。');
             });
