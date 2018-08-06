@@ -1,29 +1,25 @@
 <?php
 
-namespace Zxg321\Zmall\Database\Ad;
+namespace Zxg321\Zmall\Database\Goods;
 
 use Illuminate\Database\Eloquent\Model;
 //use Encore\Admin\Traits\AdminBuilder;
 //use Encore\Admin\Traits\ModelTree;
-class Menu extends Model
+class Spec extends Model
 {
     //use ModelTree, AdminBuilder;
     //protected $table = 'zmall_net_menu';
-    //protected $primaryKey='id';
+    //protected $primaryKey='cate_id';
     public $timestamps = false;//时间戳关闭 created_at 和 updated_at 字段
     //public $guarded = ['sort_order'];//黑名单属性
     //protected $casts = ['audit_list' => 'array',];
     public function __construct(array $attributes = [])
     {
-        $this->setTable(config('zmall.db_prefix','zmall_').'ad_menu');
+        $this->setTable(config('zmall.db_prefix','zmall_').'goods_spec');
         parent::__construct($attributes);
-        //$this->setParentColumn('parent_id');
-        //$this->setOrderColumn('sort_order');
-        //$this->setTitleColumn('title');
-        //$this->where('store_id',0);
     }
-    public function item()
+    public function goods()
     {
-         return $this->hasMany('Zxg321\Zmall\Database\Ad\Item','menu_id','id');
+         return $this->belongsTo('Zxg321\Zmall\Database\Goods\Item','goods_id','id');
     }
 }

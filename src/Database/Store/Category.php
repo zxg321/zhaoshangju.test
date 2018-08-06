@@ -1,6 +1,6 @@
 <?php
 
-namespace Zxg321\Zmall\Database\Goods;
+namespace Zxg321\Zmall\Database\Store;
 
 use Illuminate\Database\Eloquent\Model;
 use Encore\Admin\Traits\AdminBuilder;
@@ -10,12 +10,12 @@ class Category extends Model
     use ModelTree, AdminBuilder;
     //protected $table = 'zmall_net_menu';
     //protected $primaryKey='cate_id';
-    //public $timestamps = false;//时间戳关闭 created_at 和 updated_at 字段
+    public $timestamps = false;//时间戳关闭 created_at 和 updated_at 字段
     //public $guarded = ['sort_order'];//黑名单属性
     //protected $casts = ['audit_list' => 'array',];
     public function __construct(array $attributes = [])
     {
-        $this->setTable(config('zmall.db_prefix','zmall_').'goods_category');
+        $this->setTable(config('zmall.db_prefix','zmall_').'store_category');
         parent::__construct($attributes);
         //$this->setParentColumn('parent_id');
         $this->setOrderColumn('sort_order');
@@ -24,11 +24,11 @@ class Category extends Model
     }
     public function parent()
     {
-         return $this->hasMany('Zxg321\Zmall\Database\Goods\Category','parent_id','id');
+         return $this->hasMany('Zxg321\Zmall\Database\Store\Category','parent_id','id');
     }
     public function main()
     {
-        return $this->belongsTo('Zxg321\Zmall\Database\Goods\Category','parent_id','id');
+        return $this->belongsTo('Zxg321\Zmall\Database\Store\Category','parent_id','id');
     }
     
 }

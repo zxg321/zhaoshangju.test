@@ -1,8 +1,8 @@
 <?php
 
-namespace Zxg321\Zmall\Controllers\Goods;
+namespace Zxg321\Zmall\Controllers\Ad;
 
-use Zxg321\Zmall\Database\Goods\Category;
+use Zxg321\Zmall\Database\Ad\Menu;
 //use Zxg321\Zmall\AdminAudit;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -10,10 +10,10 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Auth\Database\Menu;
-use Illuminate\Support\Facades\Cache;
+//use Encore\Admin\Auth\Database\Menu;
+//use Illuminate\Support\Facades\Cache;
 //use Encore\Admin\Auth\Database\Administrator;
-class CategoryController extends Controller
+class MenuController extends Controller
 {
     use ModelForm;
 
@@ -23,25 +23,14 @@ class CategoryController extends Controller
      * @return Content
      */
     //protected $code=['index'=>'网站首页','newsindex'=>'新闻首页','newslist'=>'新闻列表','content'=>'内容显示'];
+    protected $title='广告分类';
     public function index()
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('商品分类');
-            $content->description('商品分类设置');
-            $uid=@request()->input('uid');
-            if($uid>0)
-                $content->body(Category::tree(function ($tree) use ($uid) {
-                    $tree->query(function ($model) use ($uid) {
-                        return $model->where('store_id', $uid);
-                    });
-                }));
-            else
-                $content->body(Category::tree(function ($tree) {
-                    $tree->query(function ($model) {
-                        return $model->where('store_id', 0);
-                    });
-                }));
+            $content->header($this->title);
+            $content->description($this->title.'设置');
+            $content->body($this->grid());
         });
     }
 
@@ -55,7 +44,7 @@ class CategoryController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('商品分类');
+            $content->header($this->title);
             $content->description('');
 
             $content->body($this->form()->edit($id));
@@ -71,7 +60,7 @@ class CategoryController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('商品分类');
+            $content->header($this->title);
             $content->description('');
 
             $content->body($this->form());
@@ -85,12 +74,13 @@ class CategoryController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Category::class, function (Grid $grid) {
+        return Admin::grid(Menu::class, function (Grid $grid) {
 
-            $grid->id('ID')->sortable();
-
-            $grid->created_at('建立时间');
-            $grid->updated_at();
+            $grid->id('序号')->sortable();
+            $grid->title('标题')->editable();
+            $grid->sort_order('排序')->editable('number');
+            $grid->st('状态')->switch();
+            $grid->model()->orderBy('sort_order');
         });
     }
 
@@ -101,23 +91,25 @@ class CategoryController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Category::class, function (Form $form) {
+        return Admin::form(Menu::class, function (Form $form) {
            
                 $form->display('id', '序号');
-                //$form->select('parent_id', '上级菜单')->options(Category::selectOptions());
                 $form->text('title', '标题');
                 $form->number('sort_order', '排序');
                 $form->switch('st', '状态');
-                $form->icon('icon', '图标');
-                $form->switch('is_logistics', '是否需要物流');
-                $form->image('logo', '图片');
-                $form->hasMany('parent','下一级商品菜单', function (Form\NestedForm $form) {
+                $form->text('cate_desc', '描述');
+                $form->text('text', '文字显示');
+                $form->text('key_words', '关键字');
+                $form->hasMany('item','广告列表', function (Form\NestedForm $form) {
                     $form->text('title', '标题');
                     $form->number('sort_order', '排序');
+                    $form->text('name', '广告名');
                     $form->switch('st', '状态');
-                    $form->icon('icon', '图标');
-                    $form->switch('is_logistics', '是否需要物流');
-                    $form->image('logo', '图片');
+                    $form->text('key_words', '关键字');
+                    $form->text('text', '文字显示');
+                    $form->image('logo', '展示图片');
+                    $form->text('url', '连接');
+                    //$form->image('image_logo', '图片');
                 });
             
 
